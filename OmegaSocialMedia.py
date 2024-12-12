@@ -23,7 +23,7 @@ class OmegaSocialMedia:
         
     
     def add_friendship(self, username, email, phone_number):
-        if user1 not in self.friendships or user2 not in self.friendships:
+        if user1 not in self.friendships or user2 not in self.friendships: # type: ignore
             print("Error: one or both users do not exist.")
         return
     
@@ -78,6 +78,26 @@ class OmegaSocialMedia:
             print(f"{post['user']}: {post['content']}")
         
     def recommend_friends(self, user):
-        # (not implemented yet)
+        if user not in self.frendships[user]:
+            print(f"Error: User '{user}' does not exist.")
+            return
+        
+        mutual_friends_count = {}
+
+        mutual_friends_count = {}
+        for friend in self.friendships[friend]:
+            if mutual_friend in self.friendships[friend]: # type: ignore
+                if mutual_friend != user and mutual_friend not in self.friendships[user]: # type: ignore
+                    if mutual_friend not in mutual_friends_count: # type: ignore
+                        mutual_friends_count[mutual_friend] = 0 # type: ignore
+                    mutual_friends_count[mutual_friend] += 1 # type: ignore
+
+        recommended_friends = sorted(mutual_friends_count.items(), key=lambda x: x [1], reverse=True)
+        if not recommended_friends:
+            print(f"No friends recommended for user'{user}'.")
+        else:
+            print(f"No friends recommended for '{user}':")
+            for friend, count in recommended_friends:
+                print(f"{friend} with {count} mutual friends.")
         pass
 
