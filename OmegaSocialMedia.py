@@ -33,7 +33,7 @@ class OmegaSocialMedia:
         
         if user2 not in self.frendships[user1]:
             self.frendships[user1].append(user2)
-            self.add_friendships[user2].append(user1)
+            self.friendships[user2].append(user1)
             print(f"Users '{user1} and {user2} are now friends.")
         else:
             print(f"Error: Users '{user1}' and '{user2}are already friends.")
@@ -51,13 +51,32 @@ class OmegaSocialMedia:
             print(f"Error: Users '{user1}' and '{user2}' are not friends")
 
     def add_post(self,user,content):
-        # (not implemented yet)
-        pass
+        if user not in self.friendships:
+            print(f"Error: User '{user}' does not exist.")
+        return
+    
+        new_post = {
+            'user': user,
+            'content': content
+        }
+
+        self.posts.append(new_post)
+        print(f"Post added by {user}: {content}")
 
     def get_user_posts(self, user):
-        # (not implemented yet)
-        pass
-
+        user_posts = [post for post in self.posts if post['user'] == user]
+        
+        if not user_posts:
+            print(f"No posts found for user '{user}',")
+            return
+        
+        for post in user_posts:
+            print(f"No posts found for user '{user}'.")
+            return
+        
+        for post in user_posts:
+            print(f"{post['user']}: {post['content']}")
+        
     def recommend_friends(self, user):
         # (not implemented yet)
         pass
