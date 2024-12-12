@@ -81,27 +81,33 @@ class OmegaSocialMedia:
         for post in user_posts:
             print(f"{post['user']}: {post['content']}")
         
-    def recommend_friends(self, user):
-        if user not in self.frendships[user]:
-            print(f"Error: User '{user}' does not exist.")
+        def recommend_friends(self, user):
+            if user not in self.friendships:
+                print(f"Error: User '{user}' does not exist.")
             return
         
-        mutual_friends_count = {}
-        for friend in self.friendships[friend]:
-            if mutual_friend in self.friendships[friend]: # type: ignore
-                if mutual_friend != user and mutual_friend not in self.friendships[user]: # type: ignore
-                    if mutual_friend not in mutual_friends_count: # type: ignore
-                        mutual_friends_count[mutual_friend] = 0 # type: ignore
-                    mutual_friends_count[mutual_friend] += 1 # type: ignore
+        mutual_friends_count = defaultdict(int)
+        visited = set()  
+        queue = deque([user])
 
-        recommended_friends = sorted(mutual_friends_count.items(), key=lambda x: x [1], reverse=True)
+        while queue:
+            current_user = queue.popleft()
+            visited.add(current_user)
+            for friend in self.friendships[current_user]:
+                if friend != user and friend not in visited:
+                    queue.append(friend)
+                for mutual_friend in self.friendships[friend]:
+                    if mutual_friend != user and mutual_friend not in self.friendships[user]:
+                        mutual_friends_count[mutual_friend] += 1
+        
+        recommended_friends = sorted(mutual_friends_count.items(), key=lambda x: x[1], reverse=True)
+        
         if not recommended_friends:
-            print(f"No friends recommended for user'{user}'.")
+            print(f"No friends recommended for '{user}'.")
         else:
-            print(f"No friends recommended for '{user}':")
+            print(f"Friend recommendations for '{user}':")
             for friend, count in recommended_friends:
                 print(f"{friend} with {count} mutual friends.")
-        pass
 
     def remove_post(self, user, content):
         if user not in self.friendships:
@@ -116,6 +122,6 @@ class OmegaSocialMedia:
         
         if post_to_remove:
             self.posts.remove(post_to_remove)
-            print(f"Post removed by {user}: {content}")1
+            print(f"Post removed by {user}: {content}")
         else:
             print(f"Error: Post not found for user '{user}' with content '{content}'.")
