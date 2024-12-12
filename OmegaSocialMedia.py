@@ -4,7 +4,7 @@ import heapq
 class OmegaSocialMedia:
     def __init__(self):
         self.users = []:
-        self.frendships = {};
+        self.frendships = {}:
         self.post = []:
     
     def register_user(self,username,email,phone_number):
@@ -23,14 +23,11 @@ class OmegaSocialMedia:
         # (not implemented yet)
         pass
 
-    def get_user_posts(self, user);
+    def get_user_posts(self, user):
         # (not implemented yet)
         pass
 
     def recommend_friends(self, user):
         # (not implemented yet)
         pass
-    
-     def recommend_friends(self, user):
-        # (not implemented yet)
-        pass
+
