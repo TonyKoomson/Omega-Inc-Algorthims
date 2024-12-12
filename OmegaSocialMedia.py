@@ -3,9 +3,9 @@ import heapq
 
 class OmegaSocialMedia:
     def __init__(self):
-        self.users = []:
-        self.frendships = {}:
-        self.post = []:
+        self.users = []
+        self.frendships = {}
+        self.post = []
     
     def register_user(self,username,email,phone_number):
         for user in self.users:
@@ -59,8 +59,12 @@ class OmegaSocialMedia:
             'user': user,
             'content': content
         }
-
+        
+        if not content.strip():
+            print("Error: Post content cannot be empty or just spaces.")
+            return
         self.posts.append(new_post)
+
         print(f"Post added by {user}: {content}")
 
     def get_user_posts(self, user):
@@ -82,8 +86,6 @@ class OmegaSocialMedia:
             print(f"Error: User '{user}' does not exist.")
             return
         
-        mutual_friends_count = {}
-
         mutual_friends_count = {}
         for friend in self.friendships[friend]:
             if mutual_friend in self.friendships[friend]: # type: ignore
