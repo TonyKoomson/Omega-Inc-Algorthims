@@ -59,7 +59,7 @@ class OmegaSocialMedia:
             'user': user,
             'content': content
         }
-        
+
         if not content.strip():
             print("Error: Post content cannot be empty or just spaces.")
             return
@@ -103,3 +103,19 @@ class OmegaSocialMedia:
                 print(f"{friend} with {count} mutual friends.")
         pass
 
+    def remove_post(self, user, content):
+        if user not in self.friendships:
+            print(f"Error: User '{user}' does not exist.")
+            return
+        
+        post_to_remove = None
+        for post in self.posts:
+            if post['user'] == user and post['content'] == content:
+                post_to_remove = post
+                break
+        
+        if post_to_remove:
+            self.posts.remove(post_to_remove)
+            print(f"Post removed by {user}: {content}")1
+        else:
+            print(f"Error: Post not found for user '{user}' with content '{content}'.")
