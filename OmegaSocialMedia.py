@@ -8,7 +8,17 @@ class OmegaSocialMedia:
         self.post = []:
     
     def register_user(self,username,email,phone_number):
-        # (not implemented yet)
+        for user in self.users:
+            if user['username'] == username:
+                print(f"Error: User with username '{username}' already exsits.")
+                return
+            new_user = {
+                'username': username,
+                'email': email,
+                'phone_number': phone_number
+            }
+            self.users.append(new_user)
+            print(f"User '{username}' registered succesfully.")
         pass
     
     def add_friendship(self, username, email, phone_number):
