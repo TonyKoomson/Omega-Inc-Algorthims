@@ -4,90 +4,82 @@ import heapq
 class OmegaSocialMedia:
     def __init__(self):
         self.users = []
-        self.frendships = {}
-        self.post = []
-    
-    def register_user(self,username,email,phone_number):
+        self.friendships = {}  
+        self.posts = []  
+        self.live_feed = []
+
+    def register_user(self, username, email, phone_number):
         for user in self.users:
             if user['username'] == username:
-                print(f"Error: User with username '{username}' already exsits.")
+                print(f"Error: User with username '{username}' already exists.")
                 return
-            new_user = {
-                'username': username,
-                'email': email,
-                'phone_number': phone_number
-            }
-            self.users.append(new_user)
-            self.frendships[username] = username
-            print(f"User '{username}' registered succesfully.")
-        
-    
-    def add_friendship(self, username, email, phone_number):
-        if user1 not in self.friendships or user2 not in self.friendships: # type: ignore
-            print("Error: one or both users do not exist.")
-        return
-    
-        if user2 not in self.friendships or user2 not in self.friendships:
+        new_user = {
+            'username': username,
+            'email': email,
+            'phone_number': phone_number
+        }
+        self.users.append(new_user)
+        self.friendships[username] = []  
+        print(f"User '{username}' registered successfully.")
+
+    def add_friendship(self, user1, user2):
+        if user1 not in self.friendships or user2 not in self.friendships:
             print("Error: One or both users do not exist.")
             return
         
-        if user2 not in self.frendships[user1]:
-            self.frendships[user1].append(user2)
+        if user2 not in self.friendships[user1]:
+            self.friendships[user1].append(user2)
             self.friendships[user2].append(user1)
-            print(f"Users '{user1} and {user2} are now friends.")
+            print(f"Users '{user1}' and '{user2}' are now friends.")
         else:
-            print(f"Error: Users '{user1}' and '{user2}are already friends.")
+            print(f"Error: Users '{user1}' and '{user2}' are already friends.")
 
     def remove_friendship(self, user1, user2):
-        if user1 not in self.friendship or user2 not in self.friendships:
-            print("Error: One or Both users does not exist")
-        return
+        if user1 not in self.friendships or user2 not in self.friendships:
+            print("Error: One or both users do not exist.")
+            return
 
-        if user2 in self.frendships[user1]:
-            self.frendships[user1].remove(user2)
-            self.frendships[user2].remove(user1)
-            print(f"Users '{user1}' and ' {user2}' are no longer friends")
+        if user2 in self.friendships[user1]:
+            self.friendships[user1].remove(user2)
+            self.friendships[user2].remove(user1)
+            print(f"Users '{user1}' and '{user2}' are no longer friends.")
         else:
-            print(f"Error: Users '{user1}' and '{user2}' are not friends")
+            print(f"Error: Users '{user1}' and '{user2}' are not friends.")
 
-    def add_post(self,user,content):
+    def add_post(self, user, content):
         if user not in self.friendships:
             print(f"Error: User '{user}' does not exist.")
-        return
-    
-        new_post = {
-            'user': user,
-            'content': content
-        }
-
+            return
+        
         if not content.strip():
             print("Error: Post content cannot be empty or just spaces.")
             return
-        self.posts.append(new_post)
 
+        new_post = {
+            'user': user,
+            'content': content,
+            'timestamp': len(self.posts)  
+        }
+        self.posts.append(new_post)
         print(f"Post added by {user}: {content}")
 
     def get_user_posts(self, user):
         user_posts = [post for post in self.posts if post['user'] == user]
         
         if not user_posts:
-            print(f"No posts found for user '{user}',")
-            return
-        
-        for post in user_posts:
             print(f"No posts found for user '{user}'.")
             return
         
         for post in user_posts:
             print(f"{post['user']}: {post['content']}")
-        
-        def recommend_friends(self, user):
-            if user not in self.friendships:
-                print(f"Error: User '{user}' does not exist.")
+
+    def recommend_friends(self, user):
+        if user not in self.friendships:
+            print(f"Error: User '{user}' does not exist.")
             return
         
         mutual_friends_count = defaultdict(int)
-        visited = set()  
+        visited = set()
         queue = deque([user])
 
         while queue:
@@ -125,3 +117,40 @@ class OmegaSocialMedia:
             print(f"Post removed by {user}: {content}")
         else:
             print(f"Error: Post not found for user '{user}' with content '{content}'.")
+
+    def merge_sort(self, posts):
+        if len(posts) <= 1:
+            return posts
+        mid = len(posts) // 2
+        left = self.merge_sort(posts[:mid])
+        right = self.merge_sort(posts[mid:])
+        
+        return self.merge(left, right)
+
+    def merge(self, left, right):
+        result = []
+        i = j = 0
+        while i < len(left) and j < len(right):
+            if left[i]['timestamp'] > right[j]['timestamp']:  
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
+
+    def get_sorted_posts(self):
+        sorted_posts = self.merge_sort(self.posts)
+        return sorted_posts
+    
+    def add_post_to_live_feed(self, post):
+        heapq.heappush(self.live_feed, (-post['timestamp'], post)) 
+
+    def get_live_feed(self):
+        live_feed_posts = []
+        while self.live_feed:
+            _, post = heapq.heappop(self.live_feed)
+            live_feed_posts.append(post)
+        return live_feed_posts
